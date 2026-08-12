@@ -1,0 +1,21 @@
+# State — contém valores de todos os atributos, inclusive sensíveis.
+# NUNCA versionar.
+*.tfstate
+*.tfstate.*
+*.tfstate.backup
+
+# Diretório de plugins baixados pelo terraform init
+.terraform/
+.terraform.lock.hcl.bkp
+
+# Arquivos de variáveis com valores reais
+*.tfvars
+*.tfvars.json
+!example.tfvars
+
+# Planos salvos — podem conter valores sensíveis
+*.tfplan
+
+# Crash logs
+crash.log
+crash.*.log
