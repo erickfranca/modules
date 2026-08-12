@@ -35,7 +35,7 @@ resource "aws_ecr_lifecycle_policy" "this" {
         rulePriority = 1
         description  = "Manter apenas as N imagens sem tag mais recentes"
         selection = {
-          tagStatus   = "untagged"
+          tagStatus   = "any"
           countType   = "imageCountMoreThan"
           countNumber = var.image_retention_count
         }
