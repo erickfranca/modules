@@ -22,3 +22,50 @@ module "service_ci" {
     Service = each.value
   }
 }
+
+# ---------------------------------------------------------------------------
+# IAM Role para o CI/CD do repositório 'erickfranca/modules' (Este repositório)
+# ---------------------------------------------------------------------------
+data "aws_iam_policy_document" "github_actions_infra_assume_role" {
+  statement {
+    effect  = "Allow"
+    actions = ["sts:AssumeRoleWithWebIdentity"]
+
+    principals {
+      type        = "Federated"
+      identifiers = [data.aws_iam_openid_connect_provider.github.arn]
+    }
+
+    condition {
+      test     = "StringEquals"
+      variable = "token.actions.githubusercontent.com:aud"
+      values   = ["sts.amazonaws.com"]
+    }
+
+    # Autoriza execuções da branch main E de Pull Requests deste repositório
+    condition {
+      test     = "StringLike"
+      variable = "token.actions.githubusercontent.com:sub"
+      values   = [
+        "repo:${var.github_owner}/modules:ref:refs/heads/main",
+        "repo:${var.github_owner}/modules:pull_request"
+      ]
+    }
+  }
+}
+
+resource "aws_iam_role" "github_actions_infra" {
+  name               = "modules-infra-ci-role"
+  description        = "Role assumida pelo GitHub Actions para gerenciar a infraestrutura via Terraform"
+  assume_role_policy = data.aws_iam_policy_document.github_actions_infra_assume_role.json
+
+  tags = {
+    ManagedBy = "terraform"
+  }
+}
+
+# Concede permissões administrativas/necessárias para a Role gerenciar os recursos
+resource "aws_iam_role_policy_attachment" "infra_admin" {
+  role       = aws_iam_role.github_actions_infra.name
+  policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
+}

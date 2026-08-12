@@ -1,5 +1,11 @@
 terraform {
-  required_version = "~> 1.15"
+  required_version = ">= 1.5"
+
+  backend "s3" {
+    bucket = "tfstate-184239210367"
+    key    = "modules/terraform.tfstate"
+    region = "us-east-1"
+  }
 
   required_providers {
     aws = {
