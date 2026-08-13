@@ -76,7 +76,6 @@ jobs:
           EOF
           gh pr comment $PR_NUMBER --body-file plan_comment.md
 
-
       - name: Terraform Plan Status Check
         if: steps.plan.outcome == 'failure' && github.event_name == 'pull_request'
         run: exit 1
