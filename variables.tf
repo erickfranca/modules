@@ -7,7 +7,7 @@ variable "aws_region" {
 variable "github_owner" {
   description = "Usuário ou organização do GitHub dona dos repositórios de serviço."
   type        = string
-  default     = "erickfranca@34513143"
+  default     = "erickfranca"
 }
 
 variable "services" {
@@ -17,5 +17,6 @@ variable "services" {
     "order-service",
     "payment-service",
     "shipping-service",
+    "inventory-service",
   ]
 }
