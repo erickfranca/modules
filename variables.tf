@@ -17,5 +17,6 @@ variable "services" {
     "order-service",
     "payment-service",
     "shipping-service",
+    "inventory-service",
   ]
 }
