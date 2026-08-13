@@ -130,3 +130,4 @@ resource "aws_iam_role_policy" "ecr_push" {
   role   = aws_iam_role.ci.id
   policy = data.aws_iam_policy_document.ecr_push.json
 }
+#test
