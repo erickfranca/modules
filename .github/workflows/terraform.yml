@@ -56,8 +56,10 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
+          PLAN_STDOUT: ${{ steps.plan.outputs.stdout }}
         run: |
-          gh pr comment $PR_NUMBER --body "#### Terraform Format Check 🖌 \`${{ steps.fmt.outcome }}\`
+          cat << EOF > plan_comment.md
+          #### Terraform Format Check 🖌 \`${{ steps.fmt.outcome }}\`
           #### Terraform Initialization ⚙️ \`${{ steps.init.outcome }}\`
           #### Terraform Validation 🤖 \`${{ steps.validate.outcome }}\`
           #### Terraform Plan 📖 \`${{ steps.plan.outcome }}\`
@@ -65,12 +67,15 @@ jobs:
           <details><summary>Show Plan Result</summary>
 
           \`\`\`hcl
-          ${{ steps.plan.outputs.stdout }}
+          $PLAN_STDOUT
           \`\`\`
 
           </details>
 
-          *Pushed by: @${{ github.actor }} in #${PR_NUMBER}*"
+          *Pushed by: @${{ github.actor }} in #${PR_NUMBER}*
+          EOF
+          gh pr comment $PR_NUMBER --body-file plan_comment.md
+
 
       - name: Terraform Plan Status Check
         if: steps.plan.outcome == 'failure' && github.event_name == 'pull_request'
