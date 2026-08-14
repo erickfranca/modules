@@ -120,6 +120,7 @@ data "aws_iam_policy_document" "ecr_push" {
       "ecr:UploadLayerPart",
       "ecr:BatchGetImage",
       "ecr:GetDownloadUrlForLayer",
+      "ecr:DescribeRepositories",
     ]
     resources = [aws_ecr_repository.this.arn]
   }
