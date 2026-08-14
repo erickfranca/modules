@@ -14,9 +14,9 @@ variable "services" {
   description = "Lista de serviços do lab. Adicionar um serviço novo = adicionar um item aqui."
   type        = list(string)
   default = [
-    "order-service",
-    "payment-service",
-    "shipping-service",
+    "node-order-service",
+    "node-payment-service",
+    "node-shipping-service",
     "inventory-service",
   ]
 }
